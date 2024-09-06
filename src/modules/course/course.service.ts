@@ -178,6 +178,11 @@ const getPaginatingCourse = async (query: any) => {
     tag = query.tag;
   }
 
+  let provider;
+  if (query?.provider) {
+    provider = query.provider;
+  }
+
   const paginateCourse = await Course.aggregate([
     { $match: {} },
     { $skip: skip },
@@ -191,9 +196,11 @@ const getPaginatingCourse = async (query: any) => {
     },
     {
       $match: {
-        // tags: { $elemMatch: { name: tag } },
         ...(tag !== undefined && { tags: { $elemMatch: { name: tag } } }),
       },
+    },
+    {
+      $match: { provider: { $regex: `^${provider}`, $options: "i" } },
     },
   ]);
 
