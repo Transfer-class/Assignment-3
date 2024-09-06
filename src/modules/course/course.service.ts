@@ -163,11 +163,28 @@ const getPaginatingCourse = async (query: any) => {
     sortField = query.sort;
   }
 
+  let minPrice;
+  let maxPrice;
+  if (query?.minPrice) {
+    minPrice = Number(query.minPrice);
+  }
+  if (query?.maxPrice) {
+    maxPrice = Number(query.maxPrice);
+  }
+
+  // const pipeline = [{ $match: {} }];
+
   const paginateCourse = await Course.aggregate([
     { $match: {} },
     { $skip: skip },
     { $limit: limit },
     { $sort: { [sortField]: ascendingOrDescending } },
+    {
+      $match: {
+        ...(minPrice !== undefined && { price: { $gte: minPrice } }),
+        ...(maxPrice !== undefined && { price: { $lte: maxPrice } }),
+      },
+    },
   ]);
 
   return paginateCourse;
