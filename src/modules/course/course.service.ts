@@ -124,7 +124,7 @@ const getPaginatingCourse = async (query: any) => {
   console.log(query);
 
   let page = 1;
-  let limit = 5; // default limit
+  let limit = 10; // default limit
   let skip = 0;
 
   // page , limit , skip
@@ -172,7 +172,11 @@ const getPaginatingCourse = async (query: any) => {
     maxPrice = Number(query.maxPrice);
   }
 
-  // const pipeline = [{ $match: {} }];
+  // matching with tag
+  let tag;
+  if (query?.tag) {
+    tag = query.tag;
+  }
 
   const paginateCourse = await Course.aggregate([
     { $match: {} },
@@ -183,6 +187,12 @@ const getPaginatingCourse = async (query: any) => {
       $match: {
         ...(minPrice !== undefined && { price: { $gte: minPrice } }),
         ...(maxPrice !== undefined && { price: { $lte: maxPrice } }),
+      },
+    },
+    {
+      $match: {
+        // tags: { $elemMatch: { name: tag } },
+        ...(tag !== undefined && { tags: { $elemMatch: { name: tag } } }),
       },
     },
   ]);
