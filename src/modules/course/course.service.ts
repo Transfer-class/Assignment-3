@@ -8,10 +8,10 @@ const createCourse = async (payload: TCourse) => {
   return result;
 };
 
-const getAllCourses = async () => {
-  const result = await Course.find({}).populate("categoryId");
-  return result;
-};
+// const getAllCourses = async () => {
+//   const result = await Course.find({}).populate("categoryId");
+//   return result;
+// };
 
 const getCourseWithReview = async (courseId: string) => {
   const session = await mongoose.startSession();
@@ -119,7 +119,7 @@ const getTheBestCourse = async () => {
   return AllCourse;
 };
 
-const getPaginatingCourse = async (query: any) => {
+const getAllCourses = async (query: any) => {
   const allCourses = await Course.find({});
   console.log(query);
 
@@ -233,5 +233,5 @@ export const CourseServices = {
   getCourseWithReview,
   updateCourse,
   getTheBestCourse,
-  getPaginatingCourse,
+  // getPaginatingCourse,
 };

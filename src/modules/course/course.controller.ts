@@ -10,14 +10,14 @@ const createCourse = async (req: Request, res: Response) => {
   });
 };
 
-const getAllCourses = async (req: Request, res: Response) => {
-  const result = await CourseServices.getAllCourses();
-  res.status(200).send({
-    success: true,
-    message: "All courses retrieved successfully",
-    data: result,
-  });
-};
+// const getAllCourses = async (req: Request, res: Response) => {
+//   const result = await CourseServices.getAllCourses();
+//   res.status(200).send({
+//     success: true,
+//     message: "All courses retrieved successfully",
+//     data: result,
+//   });
+// };
 
 const getCourseWithReview = async (req: Request, res: Response) => {
   const courseId = req.params.courseId;
@@ -49,9 +49,9 @@ const getTheBestCourse = async (req: Request, res: Response) => {
   });
 };
 
-const getPaginatingCourse = async (req: Request, res: Response) => {
+const getAllCourses = async (req: Request, res: Response) => {
   const query: any = req.query;
-  const result = await CourseServices.getPaginatingCourse(query);
+  const result = await CourseServices.getAllCourses(query);
   res.status(200).send({
     success: true,
     message: "Paginated courses retrieved successfully",
@@ -65,5 +65,5 @@ export const CourseController = {
   getCourseWithReview,
   updateCourse,
   getTheBestCourse,
-  getPaginatingCourse,
+  // getPaginatingCourse,
 };
