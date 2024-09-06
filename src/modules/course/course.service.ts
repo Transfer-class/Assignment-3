@@ -182,7 +182,17 @@ const getPaginatingCourse = async (query: any) => {
   if (query?.provider) {
     provider = query.provider;
   }
+  let durationInWeeks;
+  if (query?.durationInWeeks) {
+    durationInWeeks = Number(query.durationInWeeks);
+  }
 
+  let level;
+  if (query?.level) {
+    level = query.level;
+  }
+
+  // all the conditional pipelines are can be done by an array and another one is below
   const paginateCourse = await Course.aggregate([
     { $match: {} },
     { $skip: skip },
@@ -200,7 +210,17 @@ const getPaginatingCourse = async (query: any) => {
       },
     },
     {
-      $match: { provider: { $regex: `^${provider}`, $options: "i" } },
+      $match: {
+        ...(provider && {
+          provider: { $regex: `^${provider}`, $options: "i" },
+        }),
+      },
+    },
+    {
+      $match: { ...(durationInWeeks && { durationInWeeks: durationInWeeks }) },
+    },
+    {
+      $match: { ...(level && { "details.level": level }) },
     },
   ]);
 
