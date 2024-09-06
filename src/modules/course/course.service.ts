@@ -127,6 +127,7 @@ const getPaginatingCourse = async (query: any) => {
   let limit = 5; // default limit
   let skip = 0;
 
+  // page , limit , skip
   if (query.page) {
     page = Number(query.page);
   }
@@ -137,14 +138,36 @@ const getPaginatingCourse = async (query: any) => {
     skip = Number((page - 1) * limit);
   }
 
-  // setting pagination with limit and page
+  // valid sorting field
+  const sortingField = [
+    "title",
+    "price",
+    "startDate",
+    "endDate",
+    "endDate",
+    "language",
+    "durationInWeeks",
+  ];
 
-  // trying to paginate using aggregation pipeline
+  let sortField;
+  let ascendingOrDescending: 1 | -1 = 1;
+  // checking condition
+  if (
+    query.sort &&
+    query.sort.startsWith("-") &&
+    sortingField.includes(query.sort.substring(1))
+  ) {
+    sortField = query.sort.substring(1);
+    ascendingOrDescending = -1;
+  } else if (query.sort && sortingField.includes(query.sort)) {
+    sortField = query.sort;
+  }
 
   const paginateCourse = await Course.aggregate([
     { $match: {} },
     { $skip: skip },
     { $limit: limit },
+    { $sort: { [sortField]: ascendingOrDescending } },
   ]);
 
   return paginateCourse;
