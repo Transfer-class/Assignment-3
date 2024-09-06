@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { CourseServices } from "./course.service";
 
 const createCourse = async (req: Request, res: Response) => {
-  console.log(req.body);
   const result = await CourseServices.createCourse(req.body);
   res.status(200).send({
     success: true,
@@ -41,9 +40,19 @@ const updateCourse = async (req: Request, res: Response) => {
   });
 };
 
+const getTheBestCourse = async (req: Request, res: Response) => {
+  const result = await CourseServices.getTheBestCourse();
+  res.status(200).send({
+    success: true,
+    message: "Best course retrieved successfully",
+    data: result,
+  });
+};
+
 export const CourseController = {
   createCourse,
   getAllCourses,
   getCourseWithReview,
   updateCourse,
+  getTheBestCourse,
 };

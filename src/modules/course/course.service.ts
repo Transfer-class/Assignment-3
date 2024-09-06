@@ -102,9 +102,27 @@ const updateCourse = async (courseId: string, payload: Partial<TCourse>) => {
   }
 };
 
+const getTheBestCourse = async () => {
+  const AllCourse = await CourseReview.aggregate([
+    { $group: { _id: "$courseId", averageRating: { $avg: "$rating" } } },
+    {
+      $lookup: {
+        from: "courses",
+        localField: "_id",
+        foreignField: "_id",
+        as: "course", // now course is an array
+      },
+    },
+    { $unwind: "$course" }, // now course is an object
+    { $sort: { averageRating: -1 } },
+  ]);
+  return AllCourse;
+};
+
 export const CourseServices = {
   createCourse,
   getAllCourses,
   getCourseWithReview,
   updateCourse,
+  getTheBestCourse,
 };
