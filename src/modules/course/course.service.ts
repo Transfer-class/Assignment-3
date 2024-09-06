@@ -119,10 +119,42 @@ const getTheBestCourse = async () => {
   return AllCourse;
 };
 
+const getPaginatingCourse = async (query: any) => {
+  const allCourses = await Course.find({});
+  console.log(query);
+
+  let page = 1;
+  let limit = 5; // default limit
+  let skip = 0;
+
+  if (query.page) {
+    page = Number(query.page);
+  }
+  if (query.limit) {
+    limit = Number(query.limit);
+  }
+  if (query.page && query.limit) {
+    skip = Number((page - 1) * limit);
+  }
+
+  // setting pagination with limit and page
+
+  // trying to paginate using aggregation pipeline
+
+  const paginateCourse = await Course.aggregate([
+    { $match: {} },
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  return paginateCourse;
+};
+
 export const CourseServices = {
   createCourse,
   getAllCourses,
   getCourseWithReview,
   updateCourse,
   getTheBestCourse,
+  getPaginatingCourse,
 };

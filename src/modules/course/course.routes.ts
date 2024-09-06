@@ -8,4 +8,6 @@ router.put("/:courseId", CourseController.updateCourse);
 router.get("/:courseId/reviews", CourseController.getCourseWithReview);
 router.get("/best", CourseController.getTheBestCourse);
 
+router.get("/pagination", CourseController.getPaginatingCourse);
+
 export const CourseRoute = router;

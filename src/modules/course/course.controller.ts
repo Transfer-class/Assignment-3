@@ -49,10 +49,21 @@ const getTheBestCourse = async (req: Request, res: Response) => {
   });
 };
 
+const getPaginatingCourse = async (req: Request, res: Response) => {
+  const query: any = req.query;
+  const result = await CourseServices.getPaginatingCourse(query);
+  res.status(200).send({
+    success: true,
+    message: "Paginated courses retrieved successfully",
+    data: result,
+  });
+};
+
 export const CourseController = {
   createCourse,
   getAllCourses,
   getCourseWithReview,
   updateCourse,
   getTheBestCourse,
+  getPaginatingCourse,
 };
